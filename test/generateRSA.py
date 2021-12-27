@@ -1,1 +1,1 @@
-print("public key:...")
+print("public key:")

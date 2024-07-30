@@ -1,6 +1,3 @@
-# Test
-Test of project
+# Release distribution
 
-# Part AI 
-****
-The study of artificial intelligence.
+# Resource Store

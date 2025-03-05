@@ -116,10 +116,10 @@ cd /app/formal
 
 
 # 将相关程序都下载到本地
-#wget https://key.gamingsae.top/api/releases/download/ver1.4/run
-#wget https://key.gamingsae.top/api/releases/download/ver1.4/claim
-#wget https://key.gamingsae.top/api/releases/download/ver1.4/one_key_claim
-wget https://github.com/LeftMonster/ProfileResource/releases/download/test-0305/run
+wget https://key.gamingsae.top/api/releases/download/ver1.4/run
+wget https://key.gamingsae.top/api/releases/download/ver1.4/claim
+wget https://key.gamingsae.top/api/releases/download/ver1.4/one_key_claim
+
 
 mkdir -p /app/formal/cookies
 mkdir -p /app/formal/log
@@ -212,5 +212,5 @@ alias sc='/app/formal/script/one_key_claim.sh'" > ~/.bash_profile
 
 # ubuntu 的内置命令source不可执行，需要替换
 # 参考：https://stackoverflow.com/questions/48785324/source-command-in-shell-script-not-working
-# sudo source ~/.bash_profile
+source ~/.bash_profile
 . ~/.bash_profile

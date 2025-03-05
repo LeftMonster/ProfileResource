@@ -112,10 +112,14 @@ mkdir -p /app/formal
 cd /app/formal
 
 
+git clone git@github.com:LeftMonster/month-version.git
+
+
 # 将相关程序都下载到本地
-wget https://github.com/LeftMonster/month-version/releases/download/ver1.4/run
-wget https://github.com/LeftMonster/month-version/releases/download/ver1.4/claim
-wget https://github.com/LeftMonster/month-version/releases/download/ver1.4/one_key_claim
+#wget https://key.gamingsae.top/api/releases/download/ver1.4/run
+#wget https://key.gamingsae.top/api/releases/download/ver1.4/claim
+#wget https://key.gamingsae.top/api/releases/download/ver1.4/one_key_claim
+wget https://github.com/LeftMonster/ProfileResource/releases/download/test-0305/run
 
 mkdir -p /app/formal/cookies
 mkdir -p /app/formal/log

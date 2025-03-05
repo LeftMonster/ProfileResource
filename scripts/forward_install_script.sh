@@ -112,7 +112,7 @@ mkdir -p /app/formal
 cd /app/formal
 
 
-git clone git@github.com:LeftMonster/month-version.git
+#git clone git@github.com:LeftMonster/month-version.git
 
 
 # 将相关程序都下载到本地
@@ -139,12 +139,12 @@ echo '{
     "watch_tag": ["DropsEnabled", "启用掉宝", "DropsAtivados", "Drops有効", "DropsAtivated"],
     "watch": [
     {
-        "game": "partyanimals",
+        "game": "游戏名字/分类名",
         "streamer": []
     }
 ]
 }
-'
+' >> /app/formal/config.json
 
 chmod +x /app/formal/run
 

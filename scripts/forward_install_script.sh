@@ -116,9 +116,21 @@ cd /app/formal
 
 
 # 将相关程序都下载到本地
-wget https://key.gamingsae.top/api/releases/download/ver1.4/run
-wget https://key.gamingsae.top/api/releases/download/ver1.4/claim
-wget https://key.gamingsae.top/api/releases/download/ver1.4/one_key_claim
+wget --header="Content-Type: application/json" \
+     --post-data='{"file_id":"run"}' \
+     https://key.gamingsae.top/api/release/download/run \
+     -O run
+
+wget https://key.gamingsae.top/api/release/download/claim
+wget --header="Content-Type: application/json" \
+     --post-data='{"file_id":"claim"}' \
+     https://key.gamingsae.top/api/release/download/claim \
+     -O claim
+
+wget --header="Content-Type: application/json" \
+     --post-data='{"file_id":"one_key_claim"}' \
+     https://key.gamingsae.top/api/release/download/one_key_claim \
+     -O one_key_claim
 
 
 mkdir -p /app/formal/cookies

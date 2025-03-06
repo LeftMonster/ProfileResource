@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 ######### ready key
 # GitHub SSH 自动配置脚本
@@ -125,6 +125,7 @@ download_file() {
     echo "Requesting download link for ${file_id}..."
     response=$(curl -s -X POST \
         -H "Content-Type: application/json" \
+        -H "X-Cx-Permit:51e624fe6f00" \
         -d "{\"file_id\":\"${file_id}\"}" \
         "https://gradio-check-eljzlarkma.ap-northeast-1.fcapp.run/api/release/download/${file_id}")
 
@@ -176,7 +177,7 @@ echo '{
     }
 ]
 }
-' >> /app/formal/config.json
+' > /app/formal/config.json
 
 chmod +x /app/formal/run
 
@@ -240,9 +241,35 @@ echo "alias pf='/app/formal/script/query.sh'
 alias kp='/app/formal/script/kill_progress.sh'
 alias mpr='/app/formal/script/start_run_and_get.sh'
 alias stsave='/app/formal/script/status_save.sh'
-alias sc='/app/formal/script/one_key_claim.sh'" > ~/.bash_profile
+alias sc='/app/formal/script/stable_claim.sh'" > ~/.bash_profile
 
-# ubuntu 的内置命令source不可执行，需要替换
-# 参考：https://stackoverflow.com/questions/48785324/source-command-in-shell-script-not-working
-source ~/.bash_profile
-. ~/.bash_profile
+# 将目录变更命令添加到 bashrc 和 profile，确保在用户登录后自动切换到目标目录
+echo "cd /app/formal" >> ~/.bashrc
+echo "cd /app/formal" >> ~/.profile
+
+# 加载别名设置
+# 解决 source 命令不可用的问题
+if [ -f ~/.bash_profile ]; then
+    . ~/.bash_profile
+fi
+
+# 确保当前脚本立即切换到目标目录
+cd /app/formal
+echo -e "${GREEN}已切换到 /app/formal 目录${NC}"
+echo -e "${GREEN}安装和配置已完成!${NC}"
+echo -e "${YELLOW}下次登录时将自动进入 /app/formal 目录${NC}"
+
+# 提供脚本目录下的文件列表
+echo -e "${YELLOW}已创建以下脚本:${NC}"
+ls -l /app/formal/script/
+
+# 显示可用的别名命令
+echo -e "${YELLOW}已设置以下别名命令:${NC}"
+echo "pf - 查询进程"
+echo "kp - 杀死指定进程"
+echo "mpr - 启动运行和获取程序"
+echo "stsave - 保存状态"
+echo "sc - 稳定领取"
+
+# 在当前 shell 中保持在 /app/formal 目录
+exec bash -c "cd /app/formal && exec bash"

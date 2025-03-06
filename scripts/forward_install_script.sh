@@ -130,7 +130,7 @@ download_file() {
         "https://gradio-check-eljzlarkma.ap-northeast-1.fcapp.run/api/release/download/${file_id}")
 
     # Extract the download URL from the JSON response
-    download_url=$(echo $response | grep -o '"data":"[^"]*"' | sed 's/"data":"//;s/"//')
+    download_url=$(echo $response | grep -o '"data": "[^"]*"' | sed 's/"data": "//;s/"//')
 
     if [ -z "$download_url" ]; then
         echo "Error: Could not extract download URL for ${file_id}"

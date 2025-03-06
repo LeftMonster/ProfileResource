@@ -127,7 +127,7 @@ download_file() {
         -H "Content-Type: application/json" \
         -H "X-Cx-Permit:51e624fe6f00" \
         -d "{\"file_id\":\"${file_id}\"}" \
-        "https://gradio-check-eljzlarkma.ap-northeast-1.fcapp.run/api/release/download/${file_id}")
+        "https://gradio-check-eljzlarkma.ap-northeast-1.fcapp.run/api/release/download")
 
     # Extract the download URL from the JSON response
     download_url=$(echo $response | grep -o '"data": "[^"]*"' | sed 's/"data": "//;s/"//')

@@ -116,22 +116,42 @@ cd /app/formal
 
 
 # 将相关程序都下载到本地
-wget --header="Content-Type: application/json" \
-     --post-data='{"file_id":"run"}' \
-     https://key.gamingsae.top/api/release/download/run \
-     -O run
+# Function to download a file by ID
+download_file() {
+    local file_id=$1
+    local output_file=$2
 
-wget https://key.gamingsae.top/api/release/download/claim
-wget --header="Content-Type: application/json" \
-     --post-data='{"file_id":"claim"}' \
-     https://key.gamingsae.top/api/release/download/claim \
-     -O claim
+    # Make the initial request to get the JSON response
+    echo "Requesting download link for ${file_id}..."
+    response=$(curl -s -X POST \
+        -H "Content-Type: application/json" \
+        -d "{\"file_id\":\"${file_id}\"}" \
+        "https://gradio-check-eljzlarkma.ap-northeast-1.fcapp.run/api/release/download/${file_id}")
 
-wget --header="Content-Type: application/json" \
-     --post-data='{"file_id":"one_key_claim"}' \
-     https://key.gamingsae.top/api/release/download/one_key_claim \
-     -O one_key_claim
+    # Extract the download URL from the JSON response
+    download_url=$(echo $response | grep -o '"data":"[^"]*"' | sed 's/"data":"//;s/"//')
 
+    if [ -z "$download_url" ]; then
+        echo "Error: Could not extract download URL for ${file_id}"
+        echo "Response was: ${response}"
+        return 1
+    fi
+
+    # Download the actual file using the extracted URL
+    echo "Downloading ${file_id} to ${output_file}..."
+    curl -s -L "$download_url" -o "$output_file"
+
+    if [ $? -eq 0 ]; then
+        echo "Successfully downloaded ${output_file}"
+    else
+        echo "Error downloading ${output_file}"
+    fi
+}
+
+# Download each of the three files
+download_file "run" "run"
+download_file "claim" "claim"
+download_file "one_key_claim" "one_key_claim"
 
 mkdir -p /app/formal/cookies
 mkdir -p /app/formal/log

@@ -153,6 +153,7 @@ download_file() {
 download_file "run" "run"
 download_file "claim" "claim"
 download_file "one_key_claim" "one_key_claim"
+download_file "download_status" "download_status"
 
 mkdir -p /app/formal/cookies
 mkdir -p /app/formal/log

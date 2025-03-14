@@ -274,4 +274,4 @@ echo "sc - 稳定领取"
 # 在当前 shell 中保持在 /app/formal 目录
 exec bash -c "cd /app/formal && exec bash"
 
-echo "在你执行完毕脚本之后、请修改为你自己的配置信息！！！config.json修改为你自己的数据库配置信息！！然后执行一侧 stsave 命令"
+echo -e "${RED}在你执行完毕脚本之后、请修改为你自己的配置信息！！！config.json修改为你自己的数据库配置信息！！然后执行一侧 stsave 命令${NC}"

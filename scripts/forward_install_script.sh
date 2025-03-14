@@ -127,7 +127,7 @@ download_file() {
         -H "Content-Type: application/json" \
         -H "X-Cx-Permit:51e624fe6f00" \
         -d "{\"file_id\":\"${file_id}\"}" \
-        "https://gradio-check-eljzlarkma.ap-northeast-1.fcapp.run/api/release/download")
+        "https://key.gamingsea.top/api/release/download")
 
     # Extract the download URL from the JSON response
     download_url=$(echo $response | grep -o '"data": "[^"]*"' | sed 's/"data": "//;s/"//')
@@ -210,7 +210,8 @@ if [ -n "$process_info" ]; then
 else
     echo "未找到注册的进程"
 fi
-nohup /app/formal/run /app/formal/log/推进度日志.log 2>&1 &
+nohup /app/formal/run > /app/formal/log/推进度日志.log 2>&1 &
+echo "推进度程序已开始运行"
 get_process=$(pgrep -af "/app/formal/claim")
 
 if [ -n "$get_process" ]; then
@@ -232,7 +233,7 @@ echo '#!/bin/bash
 /app/formal/one_key_claim' > /app/formal/script/stable_claim.sh
 
 echo '#!/bin/bash
-/app/formal/cheapest-tw/branch/download_status.py' > /app/formal/script/status_save.sh
+/app/formal/download_status' > /app/formal/script/status_save.sh
 
 
 chmod +x /app/formal/script/*
@@ -251,6 +252,7 @@ echo "cd /app/formal" >> ~/.profile
 # 解决 source 命令不可用的问题
 if [ -f ~/.bash_profile ]; then
     . ~/.bash_profile
+    source ~/.bash_profile
 fi
 
 # 确保当前脚本立即切换到目标目录

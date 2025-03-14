@@ -178,6 +178,9 @@ echo '{
 ' > /app/formal/config.json
 
 chmod +x /app/formal/run
+chmod +x /app/formal/claim
+chmod +x /app/formal/one_key_claim
+chmod +x /app/formal/download_Status
 
 
 ################# 自动脚本命令部分

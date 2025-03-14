@@ -209,7 +209,7 @@ if [ -n "$process_info" ]; then
     pkill -f "/app/formal/run"
     echo "挂机进程已被杀死"
 else
-    echo "未找到注册的进程"
+    echo "未找到推进度程序的进程"
 fi
 nohup /app/formal/run > /app/formal/log/推进度日志.log 2>&1 &
 echo "推进度程序已开始运行"

@@ -154,7 +154,24 @@ download_file "download_status" "download_status"
 
 mkdir -p /app/formal/cookies
 mkdir -p /app/formal/log
-echo '{
+
+# 询问用户是否手动编辑配置文件
+echo -e "${YELLOW}配置文件设置:${NC}"
+read -p "您想手动编辑配置文件填写数据库信息吗？(y/n): " manual_edit
+
+# 初始化数据库变量
+db_host=""
+db_username=""
+db_password=""
+db_name=""
+config_server_name=""
+
+# 根据用户选择决定如何处理配置文件
+if [[ "$manual_edit" =~ ^[Yy]$ ]]; then
+    echo -e "${YELLOW}跳过数据库配置，您将需要稍后手动编辑 /app/formal/config.json 文件。${NC}"
+
+    # 创建默认配置文件
+    echo '{
     "cookie_path": "/app/formal/cookies/",
     "db": {
         "host": "",
@@ -167,7 +184,7 @@ echo '{
         "start": 0,
         "batch": 2000
     },
-    "watch_tag": ["DropsEnabled", "启用掉宝", "DropsAtivados", "Drops有効", "DropsAtivated"],
+    "watch_tag": ["DropsEnabled", "启用掉宝", "DropsAtivados", "Drops有効", "DropsAtivated", "ViewerRewards", "观众奖励"],
     "watch": [
     {
         "game": "游戏名字/分类名",
@@ -175,12 +192,46 @@ echo '{
     }
 ]
 }
-' > /app/formal/config.json
+EOF
+else
+    # 引导用户输入数据库信息
+    echo -e "${YELLOW}请输入数据库配置信息:${NC}"
+    read -p "请输入数据库主机地址(host): " db_host
+    read -p "请输入数据库用户名(username): " db_username
+    read -p "请输入数据库密码(password): " db_password
+    read -p "请输入数据库名称(name): " db_name
+
+    # 创建包含用户提供的数据库信息的配置文件
+    cat > /app/formal/config.json << EOF
+{
+    "cookie_path": "/app/formal/cookies/",
+    "db": {
+        "host": "$db_host",
+        "username": "$db_username",
+        "password": "$db_password",
+        "name": "$db_name"
+    },
+    "config_server":{
+        "name": "",
+        "start": 0,
+        "batch": 2000
+    },
+    "watch_tag": ["DropsEnabled", "启用掉宝", "DropsAtivados", "Drops有効", "DropsAtivated", "ViewerRewards", "观众奖励"],
+    "watch": [
+    {
+        "game": "游戏名字/分类名",
+        "streamer": []
+    }
+]
+}' > /app/formal/config.json
+
+    echo -e "${GREEN}已使用提供的数据库信息创建配置文件。${NC}"
+fi
 
 chmod +x /app/formal/run
 chmod +x /app/formal/claim
 chmod +x /app/formal/one_key_claim
-chmod +x /app/formal/download_Status
+chmod +x /app/formal/download_status
 
 
 ################# 自动脚本命令部分
@@ -251,10 +302,7 @@ echo "cd /app/formal" >> ~/.profile
 
 # 加载别名设置
 # 解决 source 命令不可用的问题
-if [ -f ~/.bash_profile ]; then
-    . ~/.bash_profile
-    source ~/.bash_profile
-fi
+source ~/.bash_profile 2>/dev/null || . ~/.bash_profile
 
 # 确保当前脚本立即切换到目标目录
 cd /app/formal
@@ -274,7 +322,32 @@ echo "mpr - 启动运行和获取程序"
 echo "stsave - 保存状态"
 echo "sc - 稳定领取"
 
+# 执行 stsave 命令
+if [[ "$manual_edit" =~ ^[Nn]$ ]]; then
+    echo -e "${YELLOW}正在执行 stsave 命令...${NC}"
+    /app/formal/script/status_save.sh
+    echo -e "${GREEN}stsave 命令执行完毕${NC}"
+
+    # 从 /app/formal/cookies 中获取一个 *.pkl 文件名
+    echo -e "${YELLOW}正在从 cookies 目录获取文件名...${NC}"
+    cookie_file=$(ls /app/formal/cookies/*.pkl 2>/dev/null | head -n 1)
+
+    if [ -n "$cookie_file" ]; then
+        # 提取文件名（不包含路径和扩展名）
+        cookie_name=$(basename "$cookie_file" .pkl)
+        echo -e "${GREEN}找到 cookie 文件: $cookie_name${NC}"
+
+        # 更新配置文件中的 name 字段
+        sed -i 's/"name": "",/"name": "'"$cookie_name"'",/' /app/formal/config.json
+        echo -e "${GREEN}已更新配置文件中的 name 字段为: $cookie_name${NC}"
+    else
+        echo -e "${RED}未找到 .pkl 文件。请稍后手动更新配置文件。${NC}"
+    fi
+else
+    echo -e "${RED}请先手动编辑配置文件，然后再执行 stsave 命令！${NC}"
+fi
+
+echo -e "${RED}如果您选择了手动编辑，请确保修改 config.json 为您自己的数据库配置信息，然后执行 stsave 命令！${NC}"
+
 # 在当前 shell 中保持在 /app/formal 目录
 exec bash -c "cd /app/formal && exec bash"
-
-echo -e "${RED}在你执行完毕脚本之后、请修改为你自己的配置信息！！！config.json修改为你自己的数据库配置信息！！然后执行一侧 stsave 命令${NC}"

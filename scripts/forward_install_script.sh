@@ -179,48 +179,14 @@ if [[ "$manual_edit" =~ ^[Yy]$ ]]; then
         "password": "",
         "name": ""
     },
-    "config_server":{
-        "name": "",
-        "start": 0,
-        "batch": 2000
-    },
+    "start": 0,
+    "batch": 2000
     "watch_tag": ["DropsEnabled", "启用掉宝", "DropsAtivados", "Drops有効", "DropsAtivated", "ViewerRewards", "观众奖励"],
     "watch": [
     {
         "game": "游戏名字/分类名",
-        "streamer": []
-    }
-]
-}
-EOF
-else
-    # 引导用户输入数据库信息
-    echo -e "${YELLOW}请输入数据库配置信息:${NC}"
-    read -p "请输入数据库主机地址(host): " db_host
-    read -p "请输入数据库用户名(username): " db_username
-    read -p "请输入数据库密码(password): " db_password
-    read -p "请输入数据库名称(name): " db_name
-
-    # 创建包含用户提供的数据库信息的配置文件
-    cat > /app/formal/config.json << EOF
-{
-    "cookie_path": "/app/formal/cookies/",
-    "db": {
-        "host": "$db_host",
-        "username": "$db_username",
-        "password": "$db_password",
-        "name": "$db_name"
-    },
-    "config_server":{
-        "name": "",
-        "start": 0,
-        "batch": 2000
-    },
-    "watch_tag": ["DropsEnabled", "启用掉宝", "DropsAtivados", "Drops有効", "DropsAtivated", "ViewerRewards", "观众奖励"],
-    "watch": [
-    {
-        "game": "游戏名字/分类名",
-        "streamer": []
+        "streamer": [],
+        "slug": "minecraft"
     }
 ]
 }' > /app/formal/config.json
@@ -302,7 +268,9 @@ echo "cd /app/formal" >> ~/.profile
 
 # 加载别名设置
 # 解决 source 命令不可用的问题
-source ~/.bash_profile 2>/dev/null || . ~/.bash_profile
+#source ~/.bash_profile 2>/dev/null || . ~/.bash_profile
+source ~/.bash_profile 2>/dev/null
+. ~/.bash_profile
 
 # 确保当前脚本立即切换到目标目录
 cd /app/formal
